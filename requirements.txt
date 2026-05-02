@@ -1,0 +1,6 @@
+crewai
+crewai-tools
+duckduckgo-search
+streamlit
+python-dotenv
+groq
