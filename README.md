@@ -109,15 +109,6 @@ Multi_Agent_Research/
 
 ---
 
-## 📈 Resume / Interview Talking Points
-
-- **Agentic AI Design**: Implemented a 4-agent sequential pipeline with role separation (Planner → Researcher → Critic → Writer), mirroring enterprise research workflows
-- **Tool-Augmented Agents**: Built a custom `DuckDuckGoSearchTool` that provides real-time web data to the Researcher agent
-- **LLM Configuration Tuning**: Separate deterministic and creative LLM configs to balance accuracy vs. creativity per agent role
-- **Rate Limit Engineering**: Implemented `max_rpm`, `max_tokens`, and token-conscious task design to operate within free-tier API constraints
-- **Production Patterns**: Input validation, structured logging, centralised config, `.env`-based secrets management, and graceful error handling
-
----
 
 ## 🛠️ Tech Stack
 
