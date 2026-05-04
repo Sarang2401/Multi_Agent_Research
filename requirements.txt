@@ -1,6 +1,8 @@
-crewai
-crewai-tools
+crewai[litellm]
+crewai-tools==1.14.3
 duckduckgo-search
 streamlit
 python-dotenv
 groq
+langchain-google-genai
+google-generativeai

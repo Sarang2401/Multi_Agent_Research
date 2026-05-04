@@ -48,3 +48,11 @@ venv.bak/
 
 # macOS
 .DS_Store
+
+# Generated reports
+reports/
+report_*.md
+
+# CrewAI cache
+*.db
+.crewai/
