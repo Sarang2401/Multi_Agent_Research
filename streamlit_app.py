@@ -20,32 +20,33 @@ st.set_page_config(
 # ─── Custom CSS ──────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-  /* Import font */
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
   html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
   /* Hero title */
   .hero-container {
     text-align: center;
-    padding: 2rem 0 2rem 0;
+    padding: 3rem 0 2.5rem 0;
   }
   .hero-title {
-    font-size: 3rem;
-    font-weight: 700;
-    color: #1e293b;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #4f46e5;
     line-height: 1.2;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: -0.02em;
   }
   .hero-sub {
     color: #475569;
-    font-size: 1.15rem;
-    max-width: 700px;
-    margin: 0 auto 2.5rem auto;
+    font-size: 1.2rem;
+    max-width: 750px;
+    margin: 0 auto;
+    line-height: 1.6;
   }
 
   @media (prefers-color-scheme: dark) {
-    .hero-title { color: #f8fafc; }
+    .hero-title { color: #818cf8; }
     .hero-sub { color: #94a3b8; }
   }
 
@@ -53,87 +54,126 @@ st.markdown("""
   .agent-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 8px;
+    padding: 24px;
     height: 100%;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .agent-card .label { font-weight: 600; font-size: 1.2rem; color: #0f172a; margin-bottom: 6px; }
-  .agent-card .desc  { font-size: 0.95rem; color: #475569; line-height: 1.5; }
+  .agent-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+  .agent-card .label { font-weight: 700; font-size: 1.3rem; color: #0f172a; margin-bottom: 4px; }
+  .agent-card .desc  { font-size: 1rem; color: #475569; line-height: 1.6; }
 
   @media (prefers-color-scheme: dark) {
     .agent-card {
       background: #1e293b;
       border: 1px solid #334155;
-      box-shadow: none;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
     }
     .agent-card .label { color: #f8fafc; }
     .agent-card .desc  { color: #cbd5e1; }
   }
 
-  /* Architecture Box */
-  .arch-box {
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
+  /* Architecture Block Diagram */
+  .arch-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+  .arch-block {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 16px 24px;
     border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    color: #334155;
-    font-family: monospace;
+    font-weight: 600;
+    color: #1e293b;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     font-size: 1.1rem;
-    margin-bottom: 1.5rem;
+  }
+  .arch-arrow {
+    color: #94a3b8;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
 
   @media (prefers-color-scheme: dark) {
-    .arch-box {
-      background: #0f172a;
+    .arch-block {
+      background-color: #1e293b;
       border-color: #334155;
-      color: #94a3b8;
+      color: #f8fafc;
     }
+    .arch-arrow { color: #475569; }
   }
 
   /* Step badges in status panel */
   .step-badge {
     display: inline-block;
-    background: #e0f2fe;
-    border: 1px solid #bae6fd;
-    border-radius: 4px;
-    padding: 4px 12px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #0369a1;
-    margin: 4px 0;
+    background: #e0e7ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #4338ca;
+    margin: 6px 0;
   }
 
   @media (prefers-color-scheme: dark) {
     .step-badge {
-      background: #0c4a6e;
-      border-color: #075985;
-      color: #bae6fd;
+      background: #312e81;
+      border-color: #3730a3;
+      color: #c7d2fe;
     }
   }
 
   /* Report container */
   .report-box {
     background: #ffffff;
-    color: #1e293b;
+    color: #0f172a;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 3rem;
+    border-radius: 12px;
+    padding: 3.5rem;
     margin-top: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+    line-height: 1.7;
+    font-size: 1.05rem;
   }
 
   @media (prefers-color-scheme: dark) {
     .report-box {
-      background: #1e293b;
-      color: #f8fafc;
-      border-color: #334155;
+      background: #0f172a;
+      color: #f1f5f9;
+      border-color: #1e293b;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
     }
-    .report-box h1, .report-box h2, .report-box h3 { border-bottom-color: #334155; }
+    .report-box h1, .report-box h2, .report-box h3 { border-bottom-color: #1e293b; }
   }
-  .report-box h1, .report-box h2, .report-box h3 { border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 24px; }
+  .report-box h1, .report-box h2, .report-box h3 { 
+    border-bottom: 2px solid #e2e8f0; 
+    padding-bottom: 10px; 
+    margin-top: 30px; 
+    font-weight: 700;
+  }
   
+  /* Buttons */
+  div.stButton > button[kind="primary"] {
+    background-color: #4f46e5 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 1.15rem !important;
+    padding: 12px 28px !important;
+    color: white !important;
+  }
+  div.stButton > button[kind="primary"]:hover { 
+    background-color: #4338ca !important; 
+  }
 </style>
 """, unsafe_allow_html=True)
 
@@ -154,18 +194,18 @@ with tab_team:
     
     cols = st.columns(4)
     agents = [
-        ("Planner", "Strategic Architect", "Decomposes the core topic into 3 distinct, highly focused research questions. Uses a deterministic LLM for logic."),
-        ("Researcher", "Deep Web Scraper", "Searches DuckDuckGo and actively scrapes full websites (via ScrapeWebsiteTool) to extract deep, factual insights."),
-        ("Critic", "Quality Assurance", "Reviews the researcher's findings to identify critical gaps, missing perspectives, and potential biases."),
-        ("Writer", "Synthesis Expert", "Compiles all findings and critiques into a polished markdown report, ensuring perfect inline academic citations."),
+        ("Planner", "Strategic Architect", "Decomposes the core topic into 3 distinct, highly focused research questions. Uses a deterministic LLM for logic.", "#ec4899"),
+        ("Researcher", "Deep Web Scraper", "Searches DuckDuckGo and actively scrapes full websites (via ScrapeWebsiteTool) to extract deep, factual insights.", "#06b6d4"),
+        ("Critic", "Quality Assurance", "Reviews the researcher's findings to identify critical gaps, missing perspectives, and potential biases.", "#f59e0b"),
+        ("Writer", "Synthesis Expert", "Compiles all findings and critiques into a polished markdown report, ensuring perfect inline academic citations.", "#10b981"),
     ]
     
-    for i, (name, role, desc) in enumerate(agents):
+    for i, (name, role, desc, color) in enumerate(agents):
         with cols[i]:
             st.markdown(f"""
-            <div class="agent-card">
+            <div class="agent-card" style="border-top: 5px solid {color};">
               <div class="label">{name}</div>
-              <div style="font-size:0.8rem; color:#0284c7; margin-bottom:8px; text-transform:uppercase; font-weight:700;">{role}</div>
+              <div style="font-size:0.85rem; color:{color}; margin-bottom:12px; text-transform:uppercase; font-weight:800;">{role}</div>
               <div class="desc">{desc}</div>
             </div>
             """, unsafe_allow_html=True)
@@ -177,11 +217,22 @@ with tab_arch:
     st.markdown("This pipeline utilizes a **Sequential Process** via CrewAI, designed for maximum efficiency and zero manager-overhead. Data flows strictly from left to right.")
     
     st.markdown("""
-    <div class="arch-box">
-      User Input &rarr; [ Planner ] &rarr; [ Researcher ] &rarr; [ Critic ] &rarr; [ Writer ] &rarr; Final Report
+    <div class="arch-container">
+      <div class="arch-block" style="border-left: 5px solid #64748b;">User Input</div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-block" style="border-left: 5px solid #ec4899;">Planner</div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-block" style="border-left: 5px solid #06b6d4;">Researcher</div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-block" style="border-left: 5px solid #f59e0b;">Critic</div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-block" style="border-left: 5px solid #10b981;">Writer</div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-block" style="border-left: 5px solid #4f46e5;">Final Report</div>
     </div>
     """, unsafe_allow_html=True)
     
+    st.markdown("<br>", unsafe_allow_html=True)
     cols = st.columns(2)
     with cols[0]:
         st.markdown("**LLM Engine:** Groq (Llama 3 70B)")
