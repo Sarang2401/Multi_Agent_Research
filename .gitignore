@@ -55,4 +55,8 @@ report_*.md
 
 # CrewAI cache
 *.db
+*.sqlite3
 .crewai/
+
+# Local Deployment Docs
+DEPLOY.md
