@@ -12,6 +12,7 @@ Architecture:
 import logging
 from crewai import Agent
 from crewai.llm import LLM
+from crewai_tools import ScrapeWebsiteTool
 from tools import DuckDuckGoSearchTool
 from config import LLM_MODEL, LLM_MAX_TOKENS, LLM_TEMPERATURE, LLM_TEMPERATURE_DETERMINISTIC
 
@@ -36,6 +37,7 @@ logger.info("LLM initialised — model: %s, max_tokens: %d", LLM_MODEL, LLM_MAX_
 
 # ─── Shared Tools ────────────────────────────────────────────────────────────
 search_tool = DuckDuckGoSearchTool()
+scrape_tool = ScrapeWebsiteTool()
 
 # ─── Agent Definitions ───────────────────────────────────────────────────────
 
@@ -55,14 +57,16 @@ planner = Agent(
 researcher = Agent(
     role="Web Researcher",
     goal=(
-        "Find accurate, recent information from the internet and "
-        "synthesise it into concise, source-backed findings."
+        "Find accurate, recent information from the internet. Use search to find URLs, "
+        "and use the scrape tool to read the full content of those URLs. Synthesise "
+        "the content into deep, source-backed findings."
     ),
     backstory=(
-        "You are a meticulous internet researcher who verifies claims against "
-        "multiple sources. You always cite URLs and never fabricate data."
+        "You are a meticulous internet researcher. You do not just read snippets; "
+        "you actively scrape and read full articles to extract deep insights. "
+        "You always cite the exact URLs you scraped."
     ),
-    tools=[search_tool],
+    tools=[search_tool, scrape_tool],
     llm=llm,
     allow_delegation=False,
     verbose=True,
@@ -85,12 +89,13 @@ writer = Agent(
     role="Report Writer",
     goal=(
         "Synthesise the research and critique into a well-structured, "
-        "professional markdown report with proper citations."
+        "professional markdown report with proper inline academic citations [1]."
     ),
     backstory=(
         "You are a professional technical writer who transforms raw research "
         "into polished, readable reports. You use clear headings, bullet points, "
-        "and always include a Sources section."
+        "and ALWAYS use inline academic citations like [1] that link to a "
+        "numbered Sources section at the end."
     ),
     # No tools: file saving is handled by output_file on the Task to avoid
     # tool-call JSON truncation under max_tokens constraints.

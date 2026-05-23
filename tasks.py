@@ -46,13 +46,13 @@ def create_tasks(topic: str) -> list[Task]:
 
     research_task = Task(
         description=(
-            "Use the search tool to find answers for each research question. "
-            "For each question, provide 2-3 bullet points of key findings with source URLs. "
-            "Be concise — one sentence per bullet."
+            "Use the DuckDuckGo Search Tool to find relevant URLs for each research question. "
+            "Then, MUST use the ScrapeWebsiteTool to read the full content of the 1-2 most promising URLs per question. "
+            "For each question, provide 2-3 deep, synthesized bullet points with the exact source URLs."
         ),
         expected_output=(
             "Structured findings: for each research question, "
-            "2-3 bullet points with facts and source URLs."
+            "2-3 deep bullet points containing facts extracted from scraped websites, along with the source URLs."
         ),
         agent=researcher,
         context=[plan_task],
@@ -72,12 +72,13 @@ def create_tasks(topic: str) -> list[Task]:
     write_task = Task(
         description=(
             "Write a professional markdown research report. "
-            "Include: Introduction, Findings (per question), Critical Gaps, Conclusion, Sources. "
+            "Include: Introduction, Findings (per question), Critical Gaps, Conclusion, and a numbered Sources section. "
+            "Ensure that you use inline academic citations (e.g. [1], [2]) throughout the Findings section that correspond to the numbered Sources section at the end. "
             "Keep it under 600 words. Do NOT include any JSON, code blocks, or tool calls."
         ),
         expected_output=(
             "A complete markdown report with sections: "
-            "Introduction, Findings, Critical Gaps, Conclusion, Sources."
+            "Introduction, Findings (with inline citations), Critical Gaps, Conclusion, Sources."
         ),
         agent=writer,
         context=[research_task, critique_task],
