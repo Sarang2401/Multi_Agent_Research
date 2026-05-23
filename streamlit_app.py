@@ -24,6 +24,12 @@ st.markdown("""
 
   html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
+  /* Dark background for the entire page */
+  .stApp, .stApp > header {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+  }
+
   /* Hero title */
   .hero-container {
     text-align: center;
