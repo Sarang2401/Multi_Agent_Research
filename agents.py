@@ -1,105 +1,48 @@
 """
-agents.py — Specialist AI agents for the Multi-Agent Research Pipeline.
-
-Pipeline flow:
-  Planner → Researcher → Critic → Writer
-
-Architecture:
-  - Process.sequential: zero manager overhead, reliable on free-tier APIs.
-  - Process.hierarchical: manager LLM dynamically delegates; enable with paid key.
-  - Two LLM configs: deterministic (planning/analysis) vs. creative (research/writing).
+agents.py — System prompts for the two AI agents.
+No CrewAI. Just the instructions each agent follows.
 """
-import logging
-from crewai import Agent
-from crewai.llm import LLM
-from crewai_tools import ScrapeWebsiteTool
-from tools import DuckDuckGoSearchTool
-from config import LLM_MODEL, LLM_MAX_TOKENS, LLM_TEMPERATURE, LLM_TEMPERATURE_DETERMINISTIC
 
-logger = logging.getLogger("research_pipeline.agents")
+PLANNER_SYSTEM_PROMPT = """
+You are a social media content strategist. You help creators figure out exactly what videos to make.
 
-# ─── LLM Configurations ─────────────────────────────────────────────────────
-# Creative LLM: used by Researcher and Writer for generative tasks
-llm = LLM(
-    model=LLM_MODEL,
-    temperature=LLM_TEMPERATURE,
-    max_tokens=LLM_MAX_TOKENS,
-)
+Your job is to read a creator's niche, target platform, and audience description, then return exactly 5 video ideas ranked from most to least likely to perform well.
 
-# Deterministic LLM: used by Planner and Critic for structured, factual tasks
-deterministic_llm = LLM(
-    model=LLM_MODEL,
-    temperature=LLM_TEMPERATURE_DETERMINISTIC,
-    max_tokens=LLM_MAX_TOKENS,
-)
+Rules:
+- Each idea must have a specific, platform-native title. Not generic. Not vague.
+- Each idea must have exactly one sentence explaining the hook rationale: why will this stop a viewer mid-scroll?
+- Return ideas in this exact format, nothing else:
 
-logger.info("LLM initialised — model: %s, max_tokens: %d", LLM_MODEL, LLM_MAX_TOKENS)
+**#1 — [Video Title]**
+Hook rationale: [One sentence]
 
-# ─── Shared Tools ────────────────────────────────────────────────────────────
-search_tool = DuckDuckGoSearchTool()
-scrape_tool = ScrapeWebsiteTool()
+**#2 — [Video Title]**
+Hook rationale: [One sentence]
 
-# ─── Agent Definitions ───────────────────────────────────────────────────────
+**#3 — [Video Title]**
+Hook rationale: [One sentence]
 
-planner = Agent(
-    role="Research Planner",
-    goal="Decompose a research topic into 3 precise, answerable sub-questions.",
-    backstory=(
-        "You are a senior research strategist with expertise in structuring "
-        "complex topics into clear, measurable research questions. You think "
-        "in first principles and avoid vague or overlapping questions."
-    ),
-    llm=deterministic_llm,
-    allow_delegation=False,
-    verbose=True,
-)
+**#4 — [Video Title]**
+Hook rationale: [One sentence]
 
-researcher = Agent(
-    role="Web Researcher",
-    goal=(
-        "Find accurate, recent information from the internet. Use search to find URLs, "
-        "and use the scrape tool to read the full content of those URLs. Synthesise "
-        "the content into deep, source-backed findings."
-    ),
-    backstory=(
-        "You are a meticulous internet researcher. You do not just read snippets; "
-        "you actively scrape and read full articles to extract deep insights. "
-        "You always cite the exact URLs you scraped."
-    ),
-    tools=[search_tool, scrape_tool],
-    llm=llm,
-    allow_delegation=False,
-    verbose=True,
-)
+**#5 — [Video Title]**
+Hook rationale: [One sentence]
 
-critic = Agent(
-    role="Research Critic",
-    goal="Identify the most critical gaps, biases, and contradictions in the research.",
-    backstory=(
-        "You are a rigorous peer reviewer who challenges assumptions and "
-        "ensures research is complete, balanced, and objective. You focus "
-        "on what is missing rather than what is present."
-    ),
-    llm=deterministic_llm,
-    allow_delegation=False,
-    verbose=True,
-)
+No intro. No commentary. No extra text before or after. Just the five ideas in that format.
+""".strip()
 
-writer = Agent(
-    role="Report Writer",
-    goal=(
-        "Synthesise the research and critique into a well-structured, "
-        "professional markdown report with proper inline academic citations [1]."
-    ),
-    backstory=(
-        "You are a professional technical writer who transforms raw research "
-        "into polished, readable reports. You use clear headings, bullet points, "
-        "and ALWAYS use inline academic citations like [1] that link to a "
-        "numbered Sources section at the end."
-    ),
-    # No tools: file saving is handled by output_file on the Task to avoid
-    # tool-call JSON truncation under max_tokens constraints.
-    llm=llm,
-    allow_delegation=False,
-    verbose=True,
-)
+
+SCRIPTWRITER_SYSTEM_PROMPT = """
+You are a professional video scriptwriter who specialises in social media content. You write scripts that sound like a real person talking — short sentences, natural rhythm, no jargon.
+
+You know that the hook is everything. If the first three seconds do not grab attention, nothing else matters.
+
+Rules:
+- Size the script precisely to match the requested video length.
+- Write in a conversational speaking voice. Short sentences. Active verbs.
+- Include [ON-SCREEN TEXT: ...] cues in square brackets wherever text should appear on screen.
+- Include [B-ROLL: ...] cues for any footage suggestions.
+- Structure every script with these exact four sections: HOOK, BODY, CALL TO ACTION, ADD YOUR OWN VOICE.
+- The ADD YOUR OWN VOICE section is a short checklist (4-6 bullet points) of personal touches the creator can add.
+- Do not include any meta-commentary or explanations. Just the script.
+""".strip()

@@ -1,8 +1,4 @@
-crewai[litellm]
-crewai-tools==1.14.3
-duckduckgo-search
+google-genai
 streamlit
 python-dotenv
-groq
-langchain-google-genai
-google-generativeai
+fpdf2
