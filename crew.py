@@ -10,6 +10,7 @@ Model: gemini-2.5-flash (free tier, no credit card).
 Retry-with-backoff on 429 rate-limit errors.
 All errors surface as plain-English custom exceptions.
 """
+
 import os
 import time
 import logging
