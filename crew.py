@@ -1,9 +1,14 @@
 """
 crew.py — Direct Gemini API calls. No CrewAI.
 
-Two public functions:
-    run_planner(niche, platform, audience)      -> str
-    run_scriptwriter(idea, platform, length)    -> str
+Public functions:
+    run_planner(niche, platform, audience)         -> str
+    run_scriptwriter(idea, platform, length)       -> str
+    run_blog_writer(topic, audience, tone, ...)    -> str
+    run_website_copy(product, audience, tone, ...) -> str
+    run_product_desc(name, category, ...)          -> str
+    run_hook_generator(topic, audience, medium)    -> str
+    run_tone_rewriter(text, tone, context)         -> str
 
 Uses google-genai (the current official SDK).
 Model: gemini-2.5-flash (free tier, no credit card).
@@ -17,8 +22,24 @@ import logging
 from google import genai
 from google.genai import types
 
-from agents import PLANNER_SYSTEM_PROMPT, SCRIPTWRITER_SYSTEM_PROMPT
-from tasks import build_planning_prompt, build_script_prompt
+from agents import (
+    PLANNER_SYSTEM_PROMPT,
+    SCRIPTWRITER_SYSTEM_PROMPT,
+    BLOG_WRITER_SYSTEM_PROMPT,
+    WEBSITE_COPY_SYSTEM_PROMPT,
+    PRODUCT_DESCRIPTION_SYSTEM_PROMPT,
+    HOOK_GENERATOR_SYSTEM_PROMPT,
+    TONE_REWRITER_SYSTEM_PROMPT,
+)
+from tasks import (
+    build_planning_prompt,
+    build_script_prompt,
+    build_blog_prompt,
+    build_website_copy_prompt,
+    build_product_desc_prompt,
+    build_hooks_prompt,
+    build_rewrite_prompt,
+)
 from config import (
     GEMINI_MODEL,
     LLM_TEMPERATURE,
@@ -166,3 +187,52 @@ def run_scriptwriter(idea: str, platform: str, video_length: str) -> str:
 
     logger.info("Running scriptwriter — idea: %s, length: %s", clean_idea, video_length)
     return _call_gemini(SCRIPTWRITER_SYSTEM_PROMPT, user_prompt)
+
+
+def run_blog_writer(topic: str, audience: str, tone: str, length: str, keywords: str = "") -> str:
+    """Write a full SEO blog post."""
+    clean_topic    = sanitize_input(topic,    "Blog topic")
+    clean_audience = sanitize_input(audience, "Target reader")
+    user_prompt    = build_blog_prompt(clean_topic, clean_audience, tone, length, keywords)
+    logger.info("Running blog writer — topic: %s", clean_topic)
+    return _call_gemini(BLOG_WRITER_SYSTEM_PROMPT, user_prompt)
+
+
+def run_website_copy(product: str, audience: str, tone: str, usp: str) -> str:
+    """Generate conversion-focused website copy."""
+    clean_product  = sanitize_input(product,  "Product/service name")
+    clean_audience = sanitize_input(audience, "Target customer")
+    clean_usp      = sanitize_input(usp,      "Unique selling point")
+    user_prompt    = build_website_copy_prompt(clean_product, clean_audience, tone, clean_usp)
+    logger.info("Running website copy — product: %s", clean_product)
+    return _call_gemini(WEBSITE_COPY_SYSTEM_PROMPT, user_prompt)
+
+
+def run_product_desc(name: str, category: str, features: str, audience: str, platform: str) -> str:
+    """Write an e-commerce product description."""
+    clean_name     = sanitize_input(name,     "Product name")
+    clean_features = sanitize_input(features, "Product features")
+    clean_audience = sanitize_input(audience, "Target buyer")
+    user_prompt    = build_product_desc_prompt(clean_name, category, clean_features, clean_audience, platform)
+    logger.info("Running product description — product: %s", clean_name)
+    return _call_gemini(PRODUCT_DESCRIPTION_SYSTEM_PROMPT, user_prompt)
+
+
+def run_hook_generator(topic: str, audience: str, medium: str) -> str:
+    """Generate 10 scroll-stopping hooks for a topic."""
+    clean_topic    = sanitize_input(topic,    "Topic")
+    clean_audience = sanitize_input(audience, "Target audience")
+    user_prompt    = build_hooks_prompt(clean_topic, clean_audience, medium)
+    logger.info("Running hook generator — topic: %s", clean_topic)
+    return _call_gemini(HOOK_GENERATOR_SYSTEM_PROMPT, user_prompt)
+
+
+def run_tone_rewriter(text: str, tone: str, context: str = "") -> str:
+    """Rewrite any text in the specified tone."""
+    if len(text.strip()) < 10:
+        raise ValueError("Text is too short to rewrite.")
+    if len(text) > 4000:
+        raise ValueError("Text is too long — please keep it under 4,000 characters.")
+    user_prompt = build_rewrite_prompt(text, tone, context)
+    logger.info("Running tone rewriter — tone: %s", tone)
+    return _call_gemini(TONE_REWRITER_SYSTEM_PROMPT, user_prompt)

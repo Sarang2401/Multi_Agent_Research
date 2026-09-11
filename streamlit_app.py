@@ -1,6 +1,6 @@
 """
 streamlit_app.py — Pistelle AI
-Research & Script Intelligence Studio
+Content Intelligence Suite
 """
 import base64
 import time
@@ -36,9 +36,6 @@ LOGO_IMG = (
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CSS
-# Design direction: Linear.app / Vercel / Raycast
-# Rules: no glow, no gradients on text, no floating blobs, no neon
-# Typefaces feel deliberate, spacing is tight, hierarchy is clear
 # ──────────────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -77,8 +74,8 @@ html, body, [class*="css"] {
 [data-testid="stSidebar"] {
   background: var(--surface) !important;
   border-right: 1px solid var(--border) !important;
-  min-width: 220px !important;
-  max-width: 220px !important;
+  min-width: 240px !important;
+  max-width: 240px !important;
 }
 [data-testid="stSidebar"] > div:first-child {
   padding: 0 !important;
@@ -193,7 +190,7 @@ html, body, [class*="css"] {
 
 /* ── Main container ── */
 .block-container {
-  max-width: 780px !important;
+  max-width: 820px !important;
   padding: 36px 40px 60px !important;
 }
 
@@ -320,6 +317,13 @@ button[kind="secondary"],
   transform: none !important;
   box-shadow: none !important;
   border: none !important;
+}
+/* Back / secondary buttons that should be ghost ── */
+div.stButton > button[data-testid*="back"],
+.back-btn div.stButton > button {
+  background: transparent !important;
+  color: var(--t2) !important;
+  border: 1px solid var(--border2) !important;
 }
 
 /* ── Download button ── */
@@ -490,12 +494,8 @@ def show_setup():
     with col:
         st.markdown('<div class="setup-wrap">', unsafe_allow_html=True)
 
-        # Brand
         if LOGO_B64:
-            st.markdown(
-                f'<div class="setup-brand">{LOGO_IMG}</div>',
-                unsafe_allow_html=True,
-            )
+            st.markdown(f'<div class="setup-brand">{LOGO_IMG}</div>', unsafe_allow_html=True)
 
         st.markdown("""
         <div class="setup-card">
@@ -546,18 +546,16 @@ def show_setup():
 
 def sidebar():
     with st.sidebar:
-        # Brand block
         st.markdown(f"""
         <div class="sb-top">
           <div class="sb-logo-row">
             {LOGO_IMG}
             <span class="sb-wordmark">Pistelle AI</span>
           </div>
-          <div class="sb-tagline">Research &amp; Script Studio</div>
+          <div class="sb-tagline">Content Intelligence Suite</div>
         </div>
         """, unsafe_allow_html=True)
 
-        # Engine status
         st.markdown("""
         <div class="sb-status">
           <span class="status-badge">
@@ -566,23 +564,28 @@ def sidebar():
         </div>
         """, unsafe_allow_html=True)
 
-        # Nav label
-        st.markdown('<div class="sb-nav-label">Workspace</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sb-nav-label">Tools</div>', unsafe_allow_html=True)
 
-        # Nav
         view = st.radio(
             "",
-            ["Script Generator", "Session History", "Settings"],
+            [
+                "Video Script Generator",
+                "SEO Blog Writer",
+                "Website Copywriter",
+                "Product Description",
+                "Viral Hook Generator",
+                "Tone Rewriter",
+                "Session History",
+                "Settings",
+            ],
             label_visibility="hidden",
         )
 
-        # Trust strip — placed AFTER radio, not absolutely positioned
-        st.markdown("<br>" * 6, unsafe_allow_html=True)
+        st.markdown("<br>" * 2, unsafe_allow_html=True)
         st.markdown("""
         <div class="sb-trust">
           <div class="sb-trust-item"><span class="ok">✓</span>&nbsp;Local execution only</div>
           <div class="sb-trust-item"><span class="ok">✓</span>&nbsp;Zero data collection</div>
-          <div class="sb-trust-item"><span class="ok">✓</span>&nbsp;Direct API communication</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -594,35 +597,37 @@ def sidebar():
 def main():
     view = sidebar()
 
-    for k, v in {
-        "ideas": None, "idea": None, "script": None,
-        "platform": "YouTube", "history": [],
-    }.items():
-        st.session_state.setdefault(k, v)
+    # Shared state
+    for k in ["ideas", "idea", "script", "platform", "history", "blog_post", "web_copy", "prod_desc", "hooks", "rewritten_text"]:
+        st.session_state.setdefault(k, None)
+    if st.session_state.history is None:
+        st.session_state.history = []
 
-    if   view == "Session History": show_history()
-    elif view == "Settings":        show_settings()
-    else:                           show_workspace()
+    if view == "Video Script Generator": show_video_script_generator()
+    elif view == "SEO Blog Writer":      show_blog_writer()
+    elif view == "Website Copywriter":   show_website_copy()
+    elif view == "Product Description":  show_product_description()
+    elif view == "Viral Hook Generator": show_hook_generator()
+    elif view == "Tone Rewriter":        show_tone_rewriter()
+    elif view == "Session History":      show_history()
+    elif view == "Settings":             show_settings()
 
 
-# ─── Workspace ────────────────────────────────────────────────────────────────
+# ─── Tools: Video Script Generator ──────────────────────────────────────────
 
-def show_workspace():
-    st.markdown('<p class="pg-h1">Script Generator</p>', unsafe_allow_html=True)
-    st.markdown(
-        '<p class="pg-lead">Research a niche, pick a high-potential concept, get a production-ready script.</p>',
-        unsafe_allow_html=True,
-    )
+def show_video_script_generator():
+    st.markdown('<p class="pg-h1">Video Script Generator</p>', unsafe_allow_html=True)
+    st.markdown('<p class="pg-lead">Research a niche, pick a high-potential concept, get a production-ready script.</p>', unsafe_allow_html=True)
     st.markdown('<hr class="page-divider">', unsafe_allow_html=True)
 
-    if   st.session_state.ideas  is None: step_topic()
-    elif st.session_state.idea   is None: step_pick()
-    else:                                  step_script()
+    if st.session_state.ideas is None:
+        _vsg_step_topic()
+    elif st.session_state.idea is None:
+        _vsg_step_pick()
+    else:
+        _vsg_step_script()
 
-
-# ── Step 1 ────────────────────────────────────────────────────────────────────
-
-def step_topic():
+def _vsg_step_topic():
     st.markdown("""
     <div class="breadcrumb">
       <span class="active">1 · Topic</span>
@@ -631,77 +636,42 @@ def step_topic():
     </div>
     """, unsafe_allow_html=True)
 
-    # Narrow platform row + two-col inputs in one grid
-    c_plat, _, c_blank = st.columns([1.2, 0.1, 1.7])
+    c_plat, _, _ = st.columns([1.2, 0.1, 1.7])
     with c_plat:
-        platform = st.selectbox(
-            "Platform",
-            ["YouTube", "YouTube Shorts", "Instagram Reels", "TikTok"],
-        )
+        platform = st.selectbox("Platform", ["YouTube", "YouTube Shorts", "Instagram Reels", "TikTok"])
 
     st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
-
     c1, c2 = st.columns(2, gap="large")
     with c1:
-        niche = st.text_input(
-            "Topic / niche",
-            placeholder="e.g. Personal finance for first-time investors",
-        )
+        niche = st.text_input("Topic / niche", placeholder="e.g. Personal finance for first-time investors")
     with c2:
-        audience = st.text_area(
-            "Target audience",
-            placeholder="e.g. Working professionals, 25–35, building passive income",
-            height=108,
-        )
+        audience = st.text_area("Target audience", placeholder="e.g. Working professionals, 25–35, building passive income", height=108)
 
     st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
-
     if st.button("Generate ideas →"):
-        if not niche.strip():
-            err("Enter a topic or niche.")
+        if not niche.strip() or not audience.strip():
+            err("Please fill in both topic and audience.")
             return
-        if not audience.strip():
-            err("Describe your target audience.")
-            return
-        run_planner(niche.strip(), platform, audience.strip())
+        from crew import run_planner, RateLimitError, NoKeyError
+        import crew as m
+        with st.spinner("Researching…"):
+            try:
+                result = run_planner(niche.strip(), platform, audience.strip())
+                st.session_state.ideas = result
+                st.session_state.platform = platform
+                st.rerun()
+            except RateLimitError as e: warn(str(e)); countdown(); st.rerun()
+            except Exception as exc: err(f"Failed: {exc}")
 
-
-def run_planner(niche, platform, audience):
-    from crew import run_planner as _rp, RateLimitError, NoKeyError
-    import crew as m
-    with st.spinner("Researching…"):
-        try:
-            result = _rp(niche, platform, audience)
-            st.session_state.ideas    = result
-            st.session_state.platform = platform
-            st.rerun()
-        except RateLimitError as e: warn(str(e)); countdown(); st.rerun()
-        except NoKeyError: err("Invalid API key — update it in Settings.")
-        except m.ConnectionError: err("Network error. Check your connection.")
-        except Exception as exc: err(f"Failed: {exc}")
-
-
-# ── Step 2 ────────────────────────────────────────────────────────────────────
-
-def step_pick():
+def _vsg_step_pick():
     st.markdown("""
     <div class="breadcrumb">
-      <span>1 · Topic</span>
-      <span class="sep">/</span><span class="active">2 · Pick idea</span>
-      <span class="sep">/</span><span>3 · Script</span>
+      <span>1 · Topic</span><span class="sep">/</span><span class="active">2 · Pick idea</span><span class="sep">/</span><span>3 · Script</span>
     </div>
     """, unsafe_allow_html=True)
-
-    st.markdown(
-        f'<div class="output-block">{st.session_state.ideas}</div>',
-        unsafe_allow_html=True,
-    )
-
+    st.markdown(f'<div class="output-block">{st.session_state.ideas}</div>', unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
-    chosen = st.text_input(
-        "Which concept do you want to script?",
-        placeholder="Paste or type the concept title…",
-    )
+    chosen = st.text_input("Which concept do you want to script?", placeholder="Paste or type the concept title…")
 
     c1, c2 = st.columns([1, 3])
     with c1:
@@ -710,175 +680,259 @@ def step_pick():
             st.rerun()
     with c2:
         if st.button("Continue →", use_container_width=True):
-            if not chosen.strip():
-                err("Enter or paste the concept title.")
-                return
-            st.session_state.idea = chosen.strip()
-            st.rerun()
+            if chosen.strip():
+                st.session_state.idea = chosen.strip()
+                st.rerun()
+            else: err("Enter a concept title.")
 
-
-# ── Step 3 ────────────────────────────────────────────────────────────────────
-
-def step_script():
+def _vsg_step_script():
     if st.session_state.script is None:
-        step_configure()
+        st.markdown("""
+        <div class="breadcrumb">
+          <span>1 · Topic</span><span class="sep">/</span><span>2 · Pick idea</span><span class="sep">/</span><span class="active">3 · Script</span>
+        </div>
+        """, unsafe_allow_html=True)
+        length = st.radio("Target length", ["30 s (~75 words)", "60 s (~150 words)", "3 min (~450 words)", "10 min (~1,500 words)", "20 min (~3,000 words)"], index=1)
+        st.markdown("<br>", unsafe_allow_html=True)
+        c1, c2 = st.columns([1, 3])
+        with c1:
+            if st.button("← Back"):
+                st.session_state.idea = None
+                st.rerun()
+        with c2:
+            if st.button("Write script →", use_container_width=True):
+                from crew import run_scriptwriter, RateLimitError
+                with st.spinner("Writing…"):
+                    try:
+                        res = run_scriptwriter(st.session_state.idea, st.session_state.platform, length)
+                        st.session_state.script = res
+                        _save_history("Script", st.session_state.idea, res)
+                        st.rerun()
+                    except RateLimitError as e: warn(str(e)); countdown(); st.rerun()
+                    except Exception as exc: err(f"Failed: {exc}")
     else:
-        step_output()
+        _render_output("Video Script", st.session_state.script, st.session_state.idea, lambda: st.session_state.update(ideas=None, idea=None, script=None))
 
 
-def step_configure():
-    st.markdown("""
-    <div class="breadcrumb">
-      <span>1 · Topic</span>
-      <span class="sep">/</span><span>2 · Pick idea</span>
-      <span class="sep">/</span><span class="active">3 · Script</span>
-    </div>
-    """, unsafe_allow_html=True)
+# ─── Tools: SEO Blog Writer ─────────────────────────────────────────────
 
-    st.markdown(
-        f'<p style="font-size:13px;color:var(--t2);margin-bottom:20px;">'
-        f'Writing for: <strong style="color:var(--t1);">{st.session_state.idea}</strong>'
-        f'&nbsp;·&nbsp;{st.session_state.platform}</p>',
-        unsafe_allow_html=True,
-    )
+def show_blog_writer():
+    st.markdown('<p class="pg-h1">SEO Blog Writer</p>', unsafe_allow_html=True)
+    st.markdown('<p class="pg-lead">Generate long-form, structured blog posts tailored for search engines and real readers.</p><hr class="page-divider">', unsafe_allow_html=True)
 
-    length = st.radio(
-        "Target length",
-        ["30 s (~75 words)", "60 s (~150 words)",
-         "3 min (~450 words)", "10 min (~1,500 words)", "20 min (~3,000 words)"],
-        index=1,
-    )
+    if st.session_state.blog_post is None:
+        c1, c2 = st.columns(2, gap="large")
+        with c1:
+            topic = st.text_input("Blog topic", placeholder="e.g. 10 ways to improve website conversion rates")
+            audience = st.text_input("Target reader", placeholder="e.g. Small business owners")
+        with c2:
+            tone = st.selectbox("Tone of voice", ["Authoritative & Professional", "Conversational & Friendly", "Educational & Simple", "Bold & Opinionated"])
+            length = st.selectbox("Target length", ["Short (600 words)", "Standard (1,200 words)", "Long-form (2,500 words)"], index=1)
+        
+        keywords = st.text_input("Target keywords (comma separated, optional)", placeholder="e.g. conversion rate optimization, CRO tools")
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    c1, c2 = st.columns([1, 3])
-    with c1:
-        if st.button("← Back"):
-            st.session_state.idea = None
-            st.rerun()
-    with c2:
-        if st.button("Write script →", use_container_width=True):
-            run_writer(st.session_state.idea, st.session_state.platform, length)
-
-
-def run_writer(idea, platform, length):
-    from crew import run_scriptwriter as _rw, RateLimitError, NoKeyError
-    import crew as m
-    with st.spinner("Writing…"):
-        try:
-            result = _rw(idea, platform, length)
-            st.session_state.script = result
-            st.session_state.history.append({
-                "ts": time.strftime("%d %b, %H:%M"),
-                "idea": idea, "platform": platform,
-                "script": result, "words": wc(result),
-            })
-            st.rerun()
-        except RateLimitError as e: warn(str(e)); countdown(); st.rerun()
-        except NoKeyError: err("Invalid API key.")
-        except m.ConnectionError: err("Connection timed out.")
-        except Exception as exc: err(f"Failed: {exc}")
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("Write blog post →"):
+            if not topic.strip() or not audience.strip():
+                err("Please fill in topic and audience.")
+                return
+            from crew import run_blog_writer, RateLimitError
+            with st.spinner("Writing blog post…"):
+                try:
+                    res = run_blog_writer(topic.strip(), audience.strip(), tone, length, keywords.strip())
+                    st.session_state.blog_post = res
+                    _save_history("Blog Post", topic.strip(), res)
+                    st.rerun()
+                except RateLimitError as e: warn(str(e)); countdown(); st.rerun()
+                except Exception as exc: err(f"Failed: {exc}")
+    else:
+        _render_output("Blog Post", st.session_state.blog_post, "Blog Post", lambda: st.session_state.update(blog_post=None))
 
 
-def step_output():
-    txt   = st.session_state.script
-    words = wc(txt)
+# ─── Tools: Website Copywriter ──────────────────────────────────────────
 
-    # Stats
+def show_website_copy():
+    st.markdown('<p class="pg-h1">Website Copywriter</p>', unsafe_allow_html=True)
+    st.markdown('<p class="pg-lead">Write high-converting landing page copy with a structured layout.</p><hr class="page-divider">', unsafe_allow_html=True)
+
+    if st.session_state.web_copy is None:
+        c1, c2 = st.columns(2, gap="large")
+        with c1:
+            product = st.text_input("Product / Service Name", placeholder="e.g. Pistelle Analytics")
+            audience = st.text_input("Target customer", placeholder="e.g. SaaS founders")
+        with c2:
+            tone = st.selectbox("Brand Tone", ["Modern & Confident", "Friendly & Approachable", "Luxury & Exclusive", "Direct & Punchy"])
+            usp = st.text_input("Unique Selling Point", placeholder="e.g. The only tool that tracks X natively")
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("Write website copy →"):
+            if not product.strip() or not usp.strip():
+                err("Please fill in product and USP.")
+                return
+            from crew import run_website_copy, RateLimitError
+            with st.spinner("Writing copy…"):
+                try:
+                    res = run_website_copy(product.strip(), audience.strip(), tone, usp.strip())
+                    st.session_state.web_copy = res
+                    _save_history("Website Copy", product.strip(), res)
+                    st.rerun()
+                except RateLimitError as e: warn(str(e)); countdown(); st.rerun()
+                except Exception as exc: err(f"Failed: {exc}")
+    else:
+        _render_output("Website Copy", st.session_state.web_copy, "Landing Page Copy", lambda: st.session_state.update(web_copy=None))
+
+
+# ─── Tools: Product Description ──────────────────────────────────────────
+
+def show_product_description():
+    st.markdown('<p class="pg-h1">Product Description Writer</p>', unsafe_allow_html=True)
+    st.markdown('<p class="pg-lead">Generate e-commerce descriptions that focus on benefits and drive sales.</p><hr class="page-divider">', unsafe_allow_html=True)
+
+    if st.session_state.prod_desc is None:
+        c1, c2 = st.columns(2, gap="large")
+        with c1:
+            name = st.text_input("Product Name", placeholder="e.g. Lumina Desk Lamp")
+            category = st.text_input("Category", placeholder="e.g. Home Office Lighting")
+            platform = st.selectbox("Platform format", ["Shopify / Custom Store", "Amazon", "Etsy"])
+        with c2:
+            audience = st.text_input("Target Buyer", placeholder="e.g. Remote workers, designers")
+            features = st.text_area("Key Features (bullet points)", placeholder="e.g. Adjustable warmth, clamp mount, 10,000 hour LED", height=108)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("Write description →"):
+            if not name.strip() or not features.strip():
+                err("Please fill in product name and features.")
+                return
+            from crew import run_product_desc, RateLimitError
+            with st.spinner("Writing description…"):
+                try:
+                    res = run_product_desc(name.strip(), category.strip(), features.strip(), audience.strip(), platform)
+                    st.session_state.prod_desc = res
+                    _save_history("Product Desc", name.strip(), res)
+                    st.rerun()
+                except RateLimitError as e: warn(str(e)); countdown(); st.rerun()
+                except Exception as exc: err(f"Failed: {exc}")
+    else:
+        _render_output("Product Description", st.session_state.prod_desc, "Description", lambda: st.session_state.update(prod_desc=None))
+
+
+# ─── Tools: Viral Hook Generator ────────────────────────────────────────
+
+def show_hook_generator():
+    st.markdown('<p class="pg-h1">Viral Hook Generator</p>', unsafe_allow_html=True)
+    st.markdown('<p class="pg-lead">Generate 10 proven, scroll-stopping hooks and headlines for your content.</p><hr class="page-divider">', unsafe_allow_html=True)
+
+    if st.session_state.hooks is None:
+        topic = st.text_input("Topic", placeholder="e.g. Why most people fail at starting a newsletter")
+        c1, c2 = st.columns(2, gap="large")
+        with c1:
+            audience = st.text_input("Target Audience", placeholder="e.g. Aspiring creators")
+        with c2:
+            medium = st.selectbox("Medium", ["Twitter / X Thread", "Short-form Video (TikTok/Reels)", "LinkedIn Post", "Email Subject Line", "YouTube Title"])
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("Generate hooks →"):
+            if not topic.strip():
+                err("Please enter a topic.")
+                return
+            from crew import run_hook_generator, RateLimitError
+            with st.spinner("Generating hooks…"):
+                try:
+                    res = run_hook_generator(topic.strip(), audience.strip(), medium)
+                    st.session_state.hooks = res
+                    _save_history("Hooks", topic.strip()[:30]+"...", res)
+                    st.rerun()
+                except RateLimitError as e: warn(str(e)); countdown(); st.rerun()
+                except Exception as exc: err(f"Failed: {exc}")
+    else:
+        _render_output("Viral Hooks", st.session_state.hooks, "Hooks", lambda: st.session_state.update(hooks=None))
+
+
+# ─── Tools: Tone Rewriter ──────────────────────────────────────────────
+
+def show_tone_rewriter():
+    st.markdown('<p class="pg-h1">Tone Rewriter</p>', unsafe_allow_html=True)
+    st.markdown('<p class="pg-lead">Paste any text and rewrite it to perfectly match your desired tone of voice.</p><hr class="page-divider">', unsafe_allow_html=True)
+
+    if st.session_state.rewritten_text is None:
+        text = st.text_area("Original Text", placeholder="Paste the text you want to rewrite here...", height=200)
+        c1, c2 = st.columns(2, gap="large")
+        with c1:
+            tone = st.selectbox("Target Tone", ["Professional & Formal", "Casual & Friendly", "Witty & Clever", "Persuasive & Confident", "Simple & Clear (Explain like I'm 12)"])
+        with c2:
+            context = st.text_input("Context (Optional)", placeholder="e.g. This is an email to my boss")
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("Rewrite text →"):
+            if not text.strip():
+                err("Please paste some text to rewrite.")
+                return
+            from crew import run_tone_rewriter, RateLimitError
+            with st.spinner("Rewriting…"):
+                try:
+                    res = run_tone_rewriter(text.strip(), tone, context.strip())
+                    st.session_state.rewritten_text = res
+                    _save_history("Rewrite", tone, res)
+                    st.rerun()
+                except RateLimitError as e: warn(str(e)); countdown(); st.rerun()
+                except Exception as exc: err(f"Failed: {exc}")
+    else:
+        _render_output("Rewritten Text", st.session_state.rewritten_text, "Rewrite Output", lambda: st.session_state.update(rewritten_text=None))
+
+
+# ─── Common Output Renderer ─────────────────────────────────────────────
+
+def _save_history(tool: str, title: str, content: str):
+    st.session_state.history.append({
+        "ts": time.strftime("%d %b, %H:%M"),
+        "tool": tool, "title": title,
+        "content": content, "words": wc(content),
+    })
+
+def _render_output(type_str: str, text: str, safe_name: str, reset_func):
+    words = wc(text)
     st.markdown(f"""
     <div class="stat-strip">
-      <div class="stat-cell">
-        <div class="stat-k">Platform</div>
-        <div class="stat-v">{st.session_state.platform}</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-k">Words</div>
-        <div class="stat-v">{words:,}</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-k">Duration</div>
-        <div class="stat-v">{rt(words)}</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-k">Status</div>
-        <div class="stat-v stat-v-ok">Ready</div>
-      </div>
+      <div class="stat-cell"><div class="stat-k">Type</div><div class="stat-v">{type_str}</div></div>
+      <div class="stat-cell"><div class="stat-k">Words</div><div class="stat-v">{words:,}</div></div>
+      <div class="stat-cell"><div class="stat-k">Reading Time</div><div class="stat-v">{rt(words)}</div></div>
+      <div class="stat-cell"><div class="stat-k">Status</div><div class="stat-v stat-v-ok">Ready</div></div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Toolbar row
     c1, c2, c3 = st.columns([3, 1, 1])
-    with c1:
-        st.markdown(
-            f'<p style="font-size:14px;font-weight:600;color:var(--t1);'
-            f'margin:6px 0;letter-spacing:-0.01em;">{st.session_state.idea}</p>',
-            unsafe_allow_html=True,
-        )
+    with c1: pass
     with c2:
-        safe = "".join(c if c.isalnum() or c in " -_" else "_"
-                       for c in st.session_state.idea)[:35].strip()
-        st.download_button(
-            "Download .txt",
-            data=txt,
-            file_name=f"{safe.replace(' ','_')}_script.txt",
-            mime="text/plain",
-            use_container_width=True,
-        )
+        safe = "".join(c if c.isalnum() else "_" for c in safe_name)[:30]
+        st.download_button("Download .txt", data=text, file_name=f"{safe}.txt", mime="text/plain", use_container_width=True)
     with c3:
         if st.button("Start over", use_container_width=True):
-            st.session_state.update(ideas=None, idea=None, script=None)
+            reset_func()
             st.rerun()
 
-    st.markdown(f'<div class="output-block">{txt}</div>', unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    if st.button("← Different idea"):
-        st.session_state.script = None
-        st.rerun()
+    st.markdown(f'<div class="output-block">{text}</div>', unsafe_allow_html=True)
 
 
 # ─── History ──────────────────────────────────────────────────────────────────
 
 def show_history():
     st.markdown('<p class="pg-h1">Session history</p>', unsafe_allow_html=True)
-    st.markdown(
-        '<p class="pg-lead">Scripts generated in this session.</p>',
-        unsafe_allow_html=True,
-    )
-    st.markdown('<hr class="page-divider">', unsafe_allow_html=True)
-
+    st.markdown('<p class="pg-lead">Everything generated in this session.</p><hr class="page-divider">', unsafe_allow_html=True)
     h = st.session_state.get("history", [])
     if not h:
-        st.markdown(
-            "<p style='font-size:13.5px;color:var(--t3);'>Nothing yet — generate your first script.</p>",
-            unsafe_allow_html=True,
-        )
+        st.markdown("<p style='font-size:13.5px;color:var(--t3);'>Nothing yet — run a tool first.</p>", unsafe_allow_html=True)
         return
-
     for i, item in enumerate(reversed(h)):
-        with st.expander(
-            f"{item['idea']}  ·  {item['platform']}  ·  {item['words']:,} words  ·  {item['ts']}"
-        ):
-            st.download_button(
-                "Download",
-                data=item["script"],
-                file_name=f"script_{i+1}.txt",
-                key=f"dh_{i}",
-            )
-            st.markdown(
-                f'<div class="output-block">{item["script"]}</div>',
-                unsafe_allow_html=True,
-            )
+        with st.expander(f"{item['tool']}  ·  {item['title']}  ·  {item['words']:,} words  ·  {item['ts']}"):
+            st.download_button("Download", data=item["content"], file_name=f"output_{i+1}.txt", key=f"dh_{i}")
+            st.markdown(f'<div class="output-block">{item["content"]}</div>', unsafe_allow_html=True)
 
 
 # ─── Settings ─────────────────────────────────────────────────────────────────
 
 def show_settings():
     st.markdown('<p class="pg-h1">Settings</p>', unsafe_allow_html=True)
-    st.markdown(
-        '<p class="pg-lead">Manage your API credentials and engine configuration.</p>',
-        unsafe_allow_html=True,
-    )
-    st.markdown('<hr class="page-divider">', unsafe_allow_html=True)
+    st.markdown('<p class="pg-lead">Manage your API credentials.</p><hr class="page-divider">', unsafe_allow_html=True)
 
     from config import get_api_key, save_api_key, GEMINI_MODEL
     k = get_api_key()
@@ -886,24 +940,16 @@ def show_settings():
 
     st.markdown(f"""
     <div class="stat-strip" style="grid-template-columns:1fr 1fr;">
-      <div class="stat-cell">
-        <div class="stat-k">Model</div>
-        <div class="stat-v" style="font-size:13px;font-family:monospace;">{GEMINI_MODEL}</div>
-      </div>
-      <div class="stat-cell">
-        <div class="stat-k">API key</div>
-        <div class="stat-v" style="font-size:13px;font-family:monospace;">{masked}</div>
-      </div>
+      <div class="stat-cell"><div class="stat-k">Model</div><div class="stat-v" style="font-size:13px;font-family:monospace;">{GEMINI_MODEL}</div></div>
+      <div class="stat-cell"><div class="stat-k">API key</div><div class="stat-v" style="font-size:13px;font-family:monospace;">{masked}</div></div>
     </div>
     """, unsafe_allow_html=True)
 
     with st.form("sf"):
         new_key = st.text_input("New API key", type="password", placeholder="AIzaSy…")
         if st.form_submit_button("Save"):
-            if not new_key.strip():
-                err("Enter a key.")
-            elif not new_key.strip().startswith("AIza"):
-                err("Keys start with 'AIza'.")
+            if not new_key.strip(): err("Enter a key.")
+            elif not new_key.strip().startswith("AIza"): err("Keys start with 'AIza'.")
             else:
                 save_api_key(new_key.strip())
                 st.success("Saved.")
@@ -919,9 +965,6 @@ def show_settings():
 
 
 # ─── Entry ────────────────────────────────────────────────────────────────────
-
 from config import is_api_key_set
-if not is_api_key_set():
-    show_setup()
-else:
-    main()
+if not is_api_key_set(): show_setup()
+else: main()
