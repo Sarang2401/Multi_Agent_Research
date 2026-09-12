@@ -39,20 +39,20 @@ LOGO_IMG = (
 # ──────────────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 /* ── Tokens ── */
 :root {
-  --bg:       #0e0e0e;
-  --surface:  #161616;
-  --raised:   #1c1c1c;
-  --border:   #2a2a2a;
-  --border2:  #353535;
-  --t1:       #ebebeb;
-  --t2:       #888;
-  --t3:       #444;
-  --green:    #3fb950;
-  --radius:   7px;
+  --bg:       #09090b;
+  --surface:  #18181b;
+  --raised:   #27272a;
+  --border:   #27272a;
+  --border2:  #3f3f46;
+  --t1:       #fafafa;
+  --t2:       #a1a1aa;
+  --t3:       #71717a;
+  --green:    #10b981;
+  --radius:   6px;
   --f:        'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -63,19 +63,19 @@ html, body, [class*="css"] {
 }
 .stApp { background: var(--bg); color: var(--t1); }
 
-/* ── Kill Streamlit chrome ── */
-#MainMenu, footer, header { display: none !important; visibility: hidden !important; }
+/* ── Streamlit Chrome Fixes ── */
+/* Hide default menu and footer but keep header transparent so the sidebar toggle arrow remains clickable */
+#MainMenu, footer { display: none !important; visibility: hidden !important; }
+header[data-testid="stHeader"] { background: transparent !important; }
 [data-testid="stDecoration"] { display: none !important; }
-[data-testid="stToolbar"] { display: none !important; }
-.st-emotion-cache-18ni7ap { display: none !important; }  /* top bar */
 [data-testid="stStatusWidget"] { display: none !important; }
 
 /* ── Sidebar shell ── */
 [data-testid="stSidebar"] {
   background: var(--surface) !important;
   border-right: 1px solid var(--border) !important;
-  min-width: 240px !important;
-  max-width: 240px !important;
+  min-width: 250px !important;
+  max-width: 250px !important;
 }
 [data-testid="stSidebar"] > div:first-child {
   padding: 0 !important;
@@ -83,187 +83,172 @@ html, body, [class*="css"] {
   flex-direction: column;
 }
 
-/* ── Sidebar brand ── */
+/* ── Sidebar Brand & Status ── */
 .sb-top {
-  padding: 18px 16px 14px;
+  padding: 20px 16px 16px;
   border-bottom: 1px solid var(--border);
 }
 .sb-logo-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 3px;
+  gap: 10px;
+  margin-bottom: 4px;
 }
 .sb-wordmark {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--t1);
   letter-spacing: -0.01em;
 }
 .sb-tagline {
-  font-size: 11px;
-  color: var(--t3);
-  padding-left: 30px;
+  font-size: 11.5px;
+  color: var(--t2);
+  padding-left: 32px;
 }
-
-/* ── Engine status ── */
 .sb-status {
-  padding: 10px 16px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border);
 }
 .status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11.5px;
+  gap: 8px;
+  font-size: 12px;
   color: var(--t2);
   font-weight: 500;
 }
 .dot-green {
-  width: 6px; height: 6px;
+  width: 7px; height: 7px;
   border-radius: 50%;
   background: var(--green);
   flex-shrink: 0;
 }
 
-/* ── Sidebar nav section label ── */
+/* ── Sidebar Navigation Section Headers ── */
 .sb-nav-label {
-  padding: 14px 16px 6px;
+  padding: 20px 16px 8px;
   font-size: 11px;
   font-weight: 600;
   color: var(--t3);
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
 }
 
-/* ── Override the Streamlit radio widget in sidebar ── */
-/* Hide the stray label Streamlit renders for the radio group */
-[data-testid="stSidebar"] [data-testid="stRadio"] > div:first-child > label {
-  display: none !important;
+/* ── Sidebar Navigation Buttons ── */
+[data-testid="stSidebar"] .stButton {
+  padding: 0 8px;
 }
-[data-testid="stSidebar"] [data-testid="stRadio"] {
-  padding: 0 8px 8px;
-}
-[data-testid="stSidebar"] [data-testid="stRadio"] > div {
-  gap: 2px !important;
-}
-/* Nav item rows */
-[data-testid="stSidebar"] [data-testid="stRadio"] label {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  padding: 7px 10px !important;
-  border-radius: 6px !important;
-  cursor: pointer !important;
-  transition: background 0.12s !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-}
-[data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
-  background: var(--raised) !important;
-}
-[data-testid="stSidebar"] [data-testid="stRadio"] label p,
-[data-testid="stSidebar"] [data-testid="stRadio"] label span {
+[data-testid="stSidebar"] button {
+  justify-content: flex-start !important;
+  padding: 8px 12px !important;
+  font-weight: 500 !important;
   font-size: 13.5px !important;
+  border: none !important;
+  border-radius: var(--radius) !important;
+  margin-bottom: 2px !important;
+  transition: background 0.15s, color 0.15s !important;
+}
+/* Inactive nav button */
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] {
+  background: transparent !important;
   color: var(--t2) !important;
-  font-weight: 400 !important;
-  margin: 0 !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
+}
+[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"]:hover {
+  background: var(--raised) !important;
+  color: var(--t1) !important;
+}
+/* Active nav button */
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {
+  background: var(--raised) !important;
+  color: var(--t1) !important;
 }
 
-/* ── Sidebar trust section ── */
+/* ── Sidebar Trust Section ── */
 .sb-trust {
-  padding: 14px 16px;
+  padding: 16px;
   border-top: 1px solid var(--border);
   margin-top: auto;
 }
 .sb-trust-item {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 11.5px;
+  gap: 8px;
+  font-size: 12px;
   color: var(--t3);
-  padding: 3px 0;
+  padding: 4px 0;
 }
-.sb-trust-item .ok { color: var(--green); font-size: 10px; }
+.sb-trust-item .ok { color: var(--green); font-size: 11px; }
 
 /* ── Main container ── */
 .block-container {
   max-width: 820px !important;
-  padding: 36px 40px 60px !important;
+  padding: 40px 48px 80px !important;
 }
 
-/* ── Page heading ── */
+/* ── Page typography ── */
 .pg-h1 {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 600;
   color: var(--t1);
   letter-spacing: -0.02em;
-  margin: 0 0 5px;
+  margin: 0 0 6px;
   line-height: 1.3;
 }
 .pg-lead {
-  font-size: 13.5px;
+  font-size: 15px;
+  font-weight: 400;
   color: var(--t2);
-  margin: 0 0 28px;
-  line-height: 1.55;
+  margin: 0 0 32px;
+  line-height: 1.6;
 }
 .page-divider {
   border: none;
   border-top: 1px solid var(--border);
-  margin: 0 0 28px;
+  margin: 0 0 32px;
 }
 
 /* ── Breadcrumb ── */
 .breadcrumb {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
+  gap: 8px;
+  font-size: 13px;
   color: var(--t3);
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   font-weight: 500;
 }
-.breadcrumb .active { color: var(--t2); }
+.breadcrumb .active { color: var(--t1); }
 .breadcrumb .sep { color: var(--border2); }
 
-/* ── Field labels — main content only, not sidebar ── */
+/* ── Field Labels ── */
 .block-container .stTextInput label,
 .block-container .stTextArea label,
-.block-container .stSelectbox label {
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  color: var(--t3) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.07em !important;
-  margin-bottom: 6px !important;
-}
-/* Main content radio label (e.g. duration picker) */
+.block-container .stSelectbox label,
 .block-container .stRadio > label {
   font-size: 11px !important;
   font-weight: 600 !important;
   color: var(--t3) !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.07em !important;
+  letter-spacing: 0.08em !important;
+  margin-bottom: 8px !important;
 }
 
 /* ── Inputs ── */
 .stTextInput input,
 .stTextArea textarea {
-  background: var(--surface) !important;
-  border: 1px solid var(--border2) !important;
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
   border-radius: var(--radius) !important;
   color: var(--t1) !important;
-  font-size: 14px !important;
+  font-size: 14.5px !important;
   font-family: var(--f) !important;
-  padding: 9px 12px !important;
+  padding: 10px 14px !important;
   transition: border-color 0.15s !important;
   box-shadow: none !important;
 }
 .stTextInput input:focus,
 .stTextArea textarea:focus {
-  border-color: #555 !important;
+  border-color: var(--t2) !important;
   box-shadow: none !important;
 }
 .stTextInput input::placeholder,
@@ -271,94 +256,79 @@ html, body, [class*="css"] {
 
 /* ── Select ── */
 .stSelectbox > div > div {
-  background: var(--surface) !important;
-  border: 1px solid var(--border2) !important;
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
   border-radius: var(--radius) !important;
   color: var(--t1) !important;
-  font-size: 14px !important;
+  font-size: 14.5px !important;
 }
 
 /* ── Radio (main content area) ── */
-.stRadio > div { gap: 4px !important; }
+.stRadio > div { gap: 6px !important; }
 .stRadio label {
   display: flex !important;
   align-items: center !important;
   padding: 5px 0 !important;
-  font-size: 13.5px !important;
+  font-size: 14px !important;
+  color: var(--t2) !important;
+  font-weight: 500 !important;
+}
+.stRadio label[data-checked="true"] {
   color: var(--t1) !important;
 }
 
-/* ── Buttons — use attribute selectors for higher specificity ── */
-/* Targets the BaseWeb button element Streamlit renders */
-.stButton button,
-.stButton button[data-baseweb],
-button[kind="primary"],
-button[kind="secondary"],
-[data-testid="stBaseButton-secondary"],
-[data-testid="stBaseButton-primary"] {
-  background: #e8e8e8 !important;
-  color: #111111 !important;
+/* ── Primary CTA Buttons (Main content) ── */
+.block-container .stButton button[kind="primary"],
+.block-container .stButton button[kind="secondary"],
+.block-container [data-testid="stBaseButton-secondary"],
+.block-container [data-testid="stBaseButton-primary"] {
+  background: var(--t1) !important;
+  color: var(--bg) !important;
   border: none !important;
   border-radius: var(--radius) !important;
-  font-size: 13.5px !important;
+  font-size: 14px !important;
   font-weight: 600 !important;
   font-family: var(--f) !important;
-  padding: 9px 20px !important;
+  padding: 10px 24px !important;
   letter-spacing: -0.01em !important;
   box-shadow: none !important;
   cursor: pointer !important;
-  transition: background 0.15s !important;
+  transition: opacity 0.15s !important;
 }
-.stButton button:hover,
-[data-testid="stBaseButton-secondary"]:hover,
-[data-testid="stBaseButton-primary"]:hover {
-  background: #d2d2d2 !important;
-  color: #111111 !important;
+.block-container .stButton button:hover,
+.block-container [data-testid="stBaseButton-secondary"]:hover,
+.block-container [data-testid="stBaseButton-primary"]:hover {
+  background: var(--t1) !important;
+  color: var(--bg) !important;
+  opacity: 0.85 !important;
   transform: none !important;
   box-shadow: none !important;
   border: none !important;
 }
-/* Back / secondary buttons that should be ghost ── */
-div.stButton > button[data-testid*="back"],
-.back-btn div.stButton > button {
+/* Back / secondary ghost buttons in main content ── */
+.block-container div.stButton > button[data-testid*="back"],
+.block-container .back-btn div.stButton > button {
   background: transparent !important;
   color: var(--t2) !important;
   border: 1px solid var(--border2) !important;
+  padding: 9px 20px !important;
 }
 
 /* ── Download button ── */
-div[data-testid="stDownloadButton"] button {
+.block-container div[data-testid="stDownloadButton"] button {
   background: transparent !important;
   color: var(--t2) !important;
   border: 1px solid var(--border2) !important;
   border-radius: var(--radius) !important;
-  font-size: 13px !important;
+  font-size: 13.5px !important;
   font-weight: 500 !important;
   box-shadow: none !important;
+  padding: 8px 16px !important;
 }
-div[data-testid="stDownloadButton"] button:hover {
-  border-color: #555 !important;
+.block-container div[data-testid="stDownloadButton"] button:hover {
+  border-color: var(--t2) !important;
   color: var(--t1) !important;
   opacity: 1 !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-/* ── Horizontal field group card ── */
-.field-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 24px;
-  margin-bottom: 20px;
-}
-.field-card-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--t3);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin-bottom: 16px;
 }
 
 /* ── Stat strip ── */
@@ -366,27 +336,27 @@ div[data-testid="stDownloadButton"] button:hover {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   background: var(--border);
   gap: 1px;
 }
 .stat-cell {
   background: var(--surface);
-  padding: 14px 16px;
+  padding: 16px 20px;
 }
 .stat-k {
   font-size: 10.5px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
   color: var(--t3);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .stat-v {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 14.5px;
+  font-weight: 500;
   color: var(--t1);
 }
 .stat-v-ok { color: var(--green); }
@@ -395,64 +365,64 @@ div[data-testid="stDownloadButton"] button:hover {
 .output-block {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 28px 32px;
-  font-size: 14.5px;
-  line-height: 1.9;
-  color: #c8c8c8;
+  border-radius: 8px;
+  padding: 32px 36px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #d4d4d8;
   white-space: pre-wrap;
   font-family: var(--f);
 }
 
 /* ── Setup card ── */
 .setup-wrap {
-  max-width: 420px;
+  max-width: 440px;
   margin: 0 auto;
-  padding-top: 48px;
+  padding-top: 60px;
 }
 .setup-brand {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 .setup-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 28px 24px;
-  margin-bottom: 16px;
+  border-radius: 8px;
+  padding: 32px 28px;
+  margin-bottom: 20px;
 }
 .setup-card h2 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--t1);
   letter-spacing: -0.02em;
-  margin: 0 0 8px;
+  margin: 0 0 10px;
 }
 .setup-card p {
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--t2);
   line-height: 1.6;
   margin: 0;
 }
 .setup-trust {
   border-top: 1px solid var(--border);
-  padding-top: 16px;
-  margin-top: 16px;
+  padding-top: 20px;
+  margin-top: 20px;
 }
 .setup-trust-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
+  gap: 10px;
+  font-size: 13px;
   color: var(--t2);
-  padding: 5px 0;
+  padding: 6px 0;
 }
-.setup-trust-item .ok { color: var(--green); font-size: 11px; }
+.setup-trust-item .ok { color: var(--green); font-size: 12px; }
 
 /* ── Alerts ── */
-.stAlert { border-radius: var(--radius) !important; font-size: 13px !important; }
+.stAlert { border-radius: var(--radius) !important; font-size: 14px !important; }
 
 /* ── Expander ── */
-summary { font-size: 13.5px !important; color: var(--t2) !important; }
+summary { font-size: 14px !important; color: var(--t2) !important; font-weight: 500 !important; }
 [data-testid="stExpander"] {
   border: 1px solid var(--border) !important;
   border-radius: var(--radius) !important;
@@ -544,7 +514,16 @@ def show_setup():
 
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 
+def nav_btn(label: str):
+    is_active = st.session_state.current_view == label
+    if st.button(label, type="primary" if is_active else "secondary", use_container_width=True):
+        st.session_state.current_view = label
+        st.rerun()
+
 def sidebar():
+    if "current_view" not in st.session_state:
+        st.session_state.current_view = "Video Script Generator"
+
     with st.sidebar:
         st.markdown(f"""
         <div class="sb-top">
@@ -564,24 +543,19 @@ def sidebar():
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown('<div class="sb-nav-label">Tools</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sb-nav-label">Core Tools</div>', unsafe_allow_html=True)
+        nav_btn("Video Script Generator")
+        nav_btn("SEO Blog Writer")
+        nav_btn("Website Copywriter")
+        nav_btn("Product Description")
+        nav_btn("Viral Hook Generator")
+        nav_btn("Tone Rewriter")
 
-        view = st.radio(
-            "",
-            [
-                "Video Script Generator",
-                "SEO Blog Writer",
-                "Website Copywriter",
-                "Product Description",
-                "Viral Hook Generator",
-                "Tone Rewriter",
-                "Session History",
-                "Settings",
-            ],
-            label_visibility="hidden",
-        )
+        st.markdown('<div style="height: 16px;"></div>', unsafe_allow_html=True)
+        st.markdown('<div class="sb-nav-label">Workspace</div>', unsafe_allow_html=True)
+        nav_btn("Session History")
+        nav_btn("Settings")
 
-        st.markdown("<br>" * 2, unsafe_allow_html=True)
         st.markdown("""
         <div class="sb-trust">
           <div class="sb-trust-item"><span class="ok">✓</span>&nbsp;Local execution only</div>
@@ -589,13 +563,12 @@ def sidebar():
         </div>
         """, unsafe_allow_html=True)
 
-        return view
-
 
 # ─── Main app ─────────────────────────────────────────────────────────────────
 
 def main():
-    view = sidebar()
+    sidebar()
+    view = st.session_state.current_view
 
     # Shared state
     for k in ["ideas", "idea", "script", "platform", "history", "blog_post", "web_copy", "prod_desc", "hooks", "rewritten_text"]:
@@ -647,7 +620,7 @@ def _vsg_step_topic():
     with c2:
         audience = st.text_area("Target audience", placeholder="e.g. Working professionals, 25–35, building passive income", height=108)
 
-    st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
     if st.button("Generate ideas →"):
         if not niche.strip() or not audience.strip():
             err("Please fill in both topic and audience.")
@@ -675,9 +648,11 @@ def _vsg_step_pick():
 
     c1, c2 = st.columns([1, 3])
     with c1:
+        st.markdown('<div class="back-btn">', unsafe_allow_html=True)
         if st.button("← Back"):
             st.session_state.ideas = None
             st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
     with c2:
         if st.button("Continue →", use_container_width=True):
             if chosen.strip():
@@ -696,9 +671,11 @@ def _vsg_step_script():
         st.markdown("<br>", unsafe_allow_html=True)
         c1, c2 = st.columns([1, 3])
         with c1:
+            st.markdown('<div class="back-btn">', unsafe_allow_html=True)
             if st.button("← Back"):
                 st.session_state.idea = None
                 st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
         with c2:
             if st.button("Write script →", use_container_width=True):
                 from crew import run_scriptwriter, RateLimitError
@@ -906,9 +883,11 @@ def _render_output(type_str: str, text: str, safe_name: str, reset_func):
         safe = "".join(c if c.isalnum() else "_" for c in safe_name)[:30]
         st.download_button("Download .txt", data=text, file_name=f"{safe}.txt", mime="text/plain", use_container_width=True)
     with c3:
+        st.markdown('<div class="back-btn">', unsafe_allow_html=True)
         if st.button("Start over", use_container_width=True):
             reset_func()
             st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown(f'<div class="output-block">{text}</div>', unsafe_allow_html=True)
 
@@ -920,7 +899,7 @@ def show_history():
     st.markdown('<p class="pg-lead">Everything generated in this session.</p><hr class="page-divider">', unsafe_allow_html=True)
     h = st.session_state.get("history", [])
     if not h:
-        st.markdown("<p style='font-size:13.5px;color:var(--t3);'>Nothing yet — run a tool first.</p>", unsafe_allow_html=True)
+        st.markdown("<p style='font-size:14px;color:var(--t3);'>Nothing yet — run a tool first.</p>", unsafe_allow_html=True)
         return
     for i, item in enumerate(reversed(h)):
         with st.expander(f"{item['tool']}  ·  {item['title']}  ·  {item['words']:,} words  ·  {item['ts']}"):
@@ -940,8 +919,8 @@ def show_settings():
 
     st.markdown(f"""
     <div class="stat-strip" style="grid-template-columns:1fr 1fr;">
-      <div class="stat-cell"><div class="stat-k">Model</div><div class="stat-v" style="font-size:13px;font-family:monospace;">{GEMINI_MODEL}</div></div>
-      <div class="stat-cell"><div class="stat-k">API key</div><div class="stat-v" style="font-size:13px;font-family:monospace;">{masked}</div></div>
+      <div class="stat-cell"><div class="stat-k">Model</div><div class="stat-v" style="font-size:14px;font-family:monospace;">{GEMINI_MODEL}</div></div>
+      <div class="stat-cell"><div class="stat-k">API key</div><div class="stat-v" style="font-size:14px;font-family:monospace;">{masked}</div></div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -957,11 +936,13 @@ def show_settings():
                 st.rerun()
 
     st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown('<div class="back-btn">', unsafe_allow_html=True)
     if st.button("Reset workspace"):
         from config import save_api_key as _s
         _s("")
         st.session_state.clear()
         st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ─── Entry ────────────────────────────────────────────────────────────────────
