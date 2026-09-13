@@ -1,7 +1,7 @@
 ' ============================================================
 '  START HERE.vbs
-'  Double-click this file to launch the Social Media Script Generator.
-'  This opens a visible window and runs the app automatically.
+'  Double-click this file to launch Pistelle AI.
+'  This opens a command window and runs the app automatically.
 ' ============================================================
 
 Option Explicit
@@ -19,10 +19,9 @@ batFile   = scriptDir & "\run.bat"
 If Not fso.FileExists(batFile) Then
     MsgBox "Could not find run.bat in the same folder as this file." & vbCrLf & _
            "Make sure all files are in the same folder.", _
-           vbCritical, "Social Media Script Generator"
+           vbCritical, "Pistelle AI"
     WScript.Quit 1
 End If
 
-' Open cmd.exe with run.bat — /k keeps the window open after the script finishes
-' The 1 as second parameter means: show the window (not hidden)
+' Run run.bat in a visible cmd window. /k keeps it open so logs are visible.
 shell.Run "cmd.exe /k """ & batFile & """", 1, False
