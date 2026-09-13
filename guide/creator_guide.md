@@ -1,4 +1,4 @@
-# Creator Strategy Guide: Hitting the Feb 2027 Threshold
+# Pistelle AI — Creator Strategy Guide
 
 ## 1. Intro: The Feb 2027 Deadline
 
@@ -20,11 +20,11 @@ You can also use the free tiers of TubeBuddy or VidIQ to check search volume aga
 
 You know a niche is oversaturated if the top ten search results are all from channels with over a million subscribers, all uploaded within the last month. You have found a genuinely underserved niche if the top results are two or three years old, have terrible thumbnails, but still have hundreds of thousands of views. Another good sign is finding smaller channels (under 10,000 subscribers) getting disproportionately high views on specific videos within that topic.
 
-## 3. How to Use Your Planner Agent
+## 3. How to Use the Video Script Generator
 
-The Planner agent does the heavy lifting of figuring out what videos you should actually make. It takes three simple inputs: your channel niche, your target platform, and a description of your audience. 
+The **Video Script Generator** does the heavy lifting of figuring out what videos you should make. It takes three simple inputs: your channel niche, your target platform, and a description of your audience.
 
-You provide those details in the tool interface. The agent processes them and outputs exactly five video ideas. It ranks them based on potential performance and includes a one sentence rationale explaining why the hook will stop a viewer from scrolling.
+You provide those details in the tool interface. The tool processes them and outputs exactly five video ideas. It ranks them based on potential performance and includes a one sentence rationale explaining why the hook will stop a viewer from scrolling.
 
 Here is a real example of how this looks in practice.
 
@@ -49,9 +49,9 @@ Hook rationale: It removes the friction of a complex process by promising a visu
 **#5 [Video Title] $100 a Month in the S&P 500: A 10-Year Projection**
 Hook rationale: It takes a small, accessible amount of money and shows a long term, tangible result.
 
-## 4. How to Use Your Scriptwriter Agent
+## 4. How to Use the Script Step
 
-Once you pick an idea from the Planner, you hand it over to the Scriptwriter agent. You give it the chosen idea and select a video length.
+Once you pick an idea from the idea generation step, you hand it over to the Script step within the **Video Script Generator**. You give it the chosen idea and select a video length.
 
 The tool outputs a complete script structured into four distinct sections: the hook, the main body, a call to action, and an "Add Your Own Voice" checklist. It also includes on screen text cues in square brackets to help you during editing.
 
@@ -102,7 +102,7 @@ Finally, read the script out loud. If a sentence feels clunky or sounds like a g
 
 You do not need to spend money on expensive software to get started. A modern, free production stack is entirely sufficient.
 
-**Scripting:** Your bundled local tools handle this using Google Gemini. You already have this running.
+**Scripting:** The **Video Script Generator**, **Viral Hook Generator**, **SEO Blog Writer**, **Website Copywriter**, **Product Description**, and **Tone Rewriter** tools inside Pistelle AI handle this using Google Gemini. You already have all of these running.
 
 **Editing:** Use CapCut or InVideo. Both have robust free tiers that cover everything a beginner needs. Watch out for premium transitions or effects in CapCut that will lock your export behind a paywall. Stick to the basic cuts and text tools.
 
@@ -178,7 +178,7 @@ Update the status column from "Idea" to "Scripting" to "Filming" to "Editing" as
 
 ## 11. Bonus: 50 Starter Video Ideas
 
-Here are ideas ready to paste into the Planner agent for further development.
+Here are ideas ready to paste into the **Video Script Generator** for further development.
 
 **Personal Finance:**
 1. The budget method for people who hate math.
@@ -199,6 +199,6 @@ Here are ideas ready to paste into the Planner agent for further development.
 
 Shorts views now count heavily toward the monetization threshold, but the format requires a different approach.
 
-When using the Scriptwriter agent for Shorts, pay extreme attention to the first two seconds. You do not have time for a slow intro. Start mid sentence or mid action. 
+When using the **Video Script Generator** for Shorts, pay extreme attention to the first two seconds. You do not have time for a slow intro. Start mid sentence or mid action.
 
 Make your endings loop friendly. The final sentence of your Short should naturally lead right back into the very first sentence of the video. This tricks the viewer into watching the first few seconds a second time, which drastically improves your retention metrics on the platform. The Scriptwriter agent will give you a CTA, but you might need to manually tweak the final words to create that seamless loop.

@@ -1,95 +1,46 @@
-#!/bin/bash
-# ─────────────────────────────────────────────────────────────────────────────
-#  Social Media Script Generator — Mac / Linux Launcher
-#  Double-click this file (or run: bash run.sh) to start the app.
-# ─────────────────────────────────────────────────────────────────────────────
+﻿#!/usr/bin/env bash
+# ============================================================
+#  Pistelle AI  |  Content Intelligence Suite
+#  Mac / Linux Launcher
+# ============================================================
 
-echo ""
-echo " ============================================================"
-echo "  Social Media Script Generator — Starting up..."
-echo " ============================================================"
-echo ""
-
-# ── Change to the directory where this script lives ──────────────────────────
 cd "$(dirname "$0")"
 
-# ── Check Python is installed ─────────────────────────────────────────────────
-if ! command -v python3 &> /dev/null; then
-    echo " !! Python is not installed on this computer."
-    echo ""
-    echo " To fix this:"
-    echo " 1. Open your web browser and go to:  https://www.python.org/downloads/"
-    echo " 2. Download the latest version and run the installer"
-    echo " 3. Once installed, close this window and double-click this file again"
-    echo ""
-    # On Mac, also suggest the built-in way
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        echo " On Mac, you can also install it by running this in Terminal:"
-        echo "   brew install python3"
-        echo " (requires Homebrew — see brew.sh if you don't have it)"
-        echo ""
-    fi
-    read -p "Press Enter to close..."
-    exit 1
+echo ""
+echo " ============================================================"
+echo "  Pistelle AI  |  Content Intelligence Suite"
+echo " ============================================================"
+echo ""
+
+if ! command -v python3 &>/dev/null; then
+  echo " Python 3 is not installed."
+  echo " Install it from: https://www.python.org/downloads/"
+  exit 1
 fi
 
-# ── Check Python version is 3.9 or newer ─────────────────────────────────────
-PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-PYTHON_MAJOR=$(python3 -c "import sys; print(sys.version_info.major)")
-PYTHON_MINOR=$(python3 -c "import sys; print(sys.version_info.minor)")
-
-if [ "$PYTHON_MAJOR" -lt 3 ] || { [ "$PYTHON_MAJOR" -eq 3 ] && [ "$PYTHON_MINOR" -lt 9 ]; }; then
-    echo " !! Your Python version ($PYTHON_VERSION) is too old."
-    echo ""
-    echo " Please download Python 3.11 or newer from:"
-    echo " https://www.python.org/downloads/"
-    echo " Then close this window and double-click this file again."
-    echo ""
-    read -p "Press Enter to close..."
-    exit 1
+PY_OK=$(python3 -c "import sys; print(sys.version_info >= (3,9))")
+if [ "$PY_OK" != "True" ]; then
+  echo " Your Python version is too old. Please install Python 3.9 or newer."
+  exit 1
 fi
 
-echo " Python $PYTHON_VERSION found. Good to go!"
+echo " Python found. Installing / updating dependencies..."
 echo ""
 
-# ── Install / update dependencies ────────────────────────────────────────────
-echo " Installing required components (this may take a minute on first run)..."
-echo " Please wait — do NOT close this window."
+python3 -m pip install --upgrade pip --quiet --disable-pip-version-check 2>/dev/null
+python3 -m pip install -r requirements.txt --quiet --disable-pip-version-check 2>/dev/null
+
+echo " Dependencies ready."
+echo ""
+echo " Opening Pistelle AI in your browser..."
+echo ""
+echo " App address:  http://localhost:8000"
+echo ""
+echo " ============================================================"
+echo "  To stop the app, press Ctrl+C in this window."
+echo " ============================================================"
 echo ""
 
-python3 -m pip install --upgrade pip --quiet
-python3 -m pip install -r requirements.txt --quiet
+(sleep 2 && open "http://localhost:8000" 2>/dev/null || xdg-open "http://localhost:8000" 2>/dev/null) &
 
-if [ $? -ne 0 ]; then
-    echo ""
-    echo " !! Something went wrong while setting up the app."
-    echo ""
-    echo " This is usually caused by no internet connection."
-    echo " Please check that you are connected to Wi-Fi or the internet,"
-    echo " then close this window and double-click this file again."
-    echo ""
-    read -p "Press Enter to close..."
-    exit 1
-fi
-
-echo " All components ready!"
-echo ""
-
-# ── Launch the app ────────────────────────────────────────────────────────────
-echo " Opening the app in your browser..."
-echo " (If the browser doesn't open automatically, go to: http://localhost:8501)"
-echo ""
-echo " To stop the app, press Ctrl+C in this window, or just close it."
-echo ""
-
-python3 -m streamlit run streamlit_app.py --server.headless false --browser.gatherUsageStats false
-
-if [ $? -ne 0 ]; then
-    echo ""
-    echo " !! The app closed unexpectedly."
-    echo ""
-    echo " Try double-clicking this file again."
-    echo " If the problem keeps happening, please contact support."
-    echo ""
-    read -p "Press Enter to close..."
-fi
+python3 -m uvicorn api:app --host 127.0.0.1 --port 8000

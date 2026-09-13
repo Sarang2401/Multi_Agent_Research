@@ -60,3 +60,10 @@ report_*.md
 
 # Local Deployment Docs
 DEPLOY.md
+
+# Frontend build output and dependencies (not committed)
+frontend/dist/
+frontend/node_modules/
+
+# Distribution zip
+Pistelle_AI.zip

@@ -1,107 +1,142 @@
-# Social Media Script Generator
+﻿# Pistelle AI — Content Intelligence Suite
 
-Go from blank page to ready-to-film script in minutes. This app uses AI to generate video ideas and write complete scripts for YouTube, TikTok, and Instagram — and it runs entirely on your own computer for free.
+> Turn ideas into ready-to-film scripts, SEO-optimised blogs, and viral hooks in minutes. Powered by Google Gemini, running 100% locally on your own computer.
 
 ---
 
-## Setup (takes about 5 minutes, one time only)
+## What's Inside
+
+Six AI-powered tools in a single clean interface:
+
+| Tool | What it does |
+|---|---|
+| **Video Script Generator** | Research a niche → pick a top idea → get a production-ready script |
+| **SEO Blog Writer** | Full blog posts optimised for search, written in your chosen tone |
+| **Website Copywriter** | Conversion-focused copy for landing pages and product pages |
+| **Product Description** | Compelling product listings for any platform |
+| **Viral Hook Generator** | Stop-the-scroll opening lines for any platform |
+| **Tone Rewriter** | Paste any text, pick a tone, get an instant rewrite |
+
+---
+
+## Setup (5 minutes, one time only)
 
 ### Step 1 — Install Python
 
-Python is the software that powers this app. If you already have it, skip to Step 2.
+Python powers the backend of this app.
 
 1. Go to **[python.org/downloads](https://www.python.org/downloads/)**
-2. Click the big yellow **"Download Python"** button
-3. Open the downloaded file to install it
-4. ⚠️ **Important (Windows):** During installation, make sure to tick the box that says **"Add Python to PATH"** before clicking Install
+2. Download the latest version and run the installer
+3. ⚠️ **Windows only:** tick **"Add Python to PATH"** before clicking Install
 
-### Step 2 — Start the App
+### Step 2 — Launch the App
 
-**On Windows:**
-Double-click **`run.bat`** in this folder.
+**Windows:** Double-click **`run.bat`**
 
-**On Mac:**
-Right-click **`run.sh`** → click **"Open"** → click **"Open"** again if a warning appears.
+**Mac / Linux:** Open Terminal, drag `run.sh` into the window and press Enter
 
-The app will automatically set itself up (downloading what it needs), then open in your web browser. This first-time setup may take 1–2 minutes — just leave the black window open until the browser appears.
+The launcher will automatically install all dependencies on first run (takes 1–2 minutes). Once ready, the app opens in your browser automatically.
 
 ### Step 3 — Get Your Free API Key
 
-When the app opens for the first time, it will ask you for an API key. This is what lets the app talk to Google's AI — it's completely free.
+When the app opens for the first time, it will ask for a Gemini API key.
 
-1. Click the link in the app (or go to **[aistudio.google.com/apikey](https://aistudio.google.com/apikey)**)
-2. Sign in with any Google / Gmail account
+1. Go to **[aistudio.google.com/apikey](https://aistudio.google.com/apikey)**
+2. Sign in with any Google account
 3. Click **"Create API Key"**
-4. Copy the key that appears (it starts with `AIza...`)
-5. Paste it into the box in the app and click **Save & Start**
+4. Copy the key (it starts with `AIza...`)
+5. Paste it into the Setup screen and click **Save & Start**
 
-Your key is saved on your own computer — it never leaves your machine and is never shared with anyone.
+Your key is saved on your own computer only — it never leaves your machine.
 
-### Step 4 — Start Creating!
+### Step 4 — Start Creating
 
-That's it. Every time you want to use the app in the future, just double-click `run.bat` (Windows) or `run.sh` (Mac).
-
----
-
-## How to Use the App
-
-1. **Choose your platform** — YouTube Long-Form, YouTube Shorts, Instagram Reels, or TikTok
-2. **Describe your channel** — e.g. *"budget travel tips for backpackers"*
-3. **Describe your audience** — e.g. *"people in their 20s who want to see the world on a budget"*
-4. Click **Generate 5 Video Ideas** — the AI will suggest 5 ranked ideas with hook rationale
-5. **Pick the idea you like** — type or paste it into the box
-6. **Choose your video length** — 30 seconds up to 20 minutes
-7. Click **Write My Script** — the AI writes your full script with hook, body, CTA, and on-screen text cues
-8. **Download your script** as a text file, or copy it directly
+Every future session: just double-click `run.bat` (Windows) or run `run.sh` (Mac).
 
 ---
 
-## If Something Goes Wrong
+## How to Use Each Tool
 
-| What you see | What it means | What to do |
+### Video Script Generator
+1. Select your **Platform** (YouTube, TikTok, Instagram, etc.)
+2. Enter your **Niche / Topic** and **Target Audience**
+3. Click **Generate Ideas** — the AI suggests 5 ranked video concepts
+4. Pick the idea you like, then click **Write Script**
+
+### SEO Blog Writer
+Enter your topic, target audience, preferred tone, word-count range, and optional keywords. Click **Write Blog Post** for a fully structured, SEO-ready article.
+
+### Website Copywriter
+Describe your product, your audience, your tone, and your unique selling point. Returns a full landing-page copy block ready to publish.
+
+### Product Description
+Enter the product name, category, key features, target buyer, and the platform you're selling on (Amazon, Shopify, Etsy, etc.).
+
+### Viral Hook Generator
+Pick your platform, enter your topic and audience, choose a hook style, and get scroll-stopping opening lines.
+
+### Tone Rewriter
+Paste any existing text, pick a target tone (Professional, Casual, Persuasive, etc.), and get an instant rewrite that keeps your meaning.
+
+---
+
+## Troubleshooting
+
+| What you see | Cause | Fix |
 |---|---|---|
-| *"Python is not installed"* | Python hasn't been installed yet | Follow Step 1 above, restart the launcher after installing |
-| *"Your Python version is too old"* | You have an older Python that won't work | Download Python 3.11+ from python.org, restart launcher |
-| *"Something went wrong while setting up"* | A file couldn't download | Check your internet connection, then try the launcher again |
-| *"Paste your free Gemini API key here"* | The app needs your key before it can work | Follow Step 3 above |
-| *"Your API key didn't work"* | The key was typed wrong, expired, or not activated yet | Go back to aistudio.google.com/apikey and create a new key |
-| *"Free tier limit hit — wait a minute"* | You've used the AI a lot in a short time | Wait 60 seconds and try again — the free limit resets quickly |
-| *"Couldn't connect to the internet"* | No internet connection detected | Check your Wi-Fi or cable, then try again |
-| App opens but browser shows an error | Streamlit port conflict | Close the black terminal window and double-click the launcher again |
-| Nothing happens when I double-click | File permissions or Python not in PATH | On Mac: right-click → Open. On Windows: reinstall Python with "Add to PATH" ticked |
+| "Python is not installed" | Python missing | Install from python.org, tick "Add to PATH" |
+| "Your Python version is too old" | Python < 3.9 | Download Python 3.11+ |
+| "Something went wrong during setup" | Network error | Check internet, relaunch run.bat |
+| Setup screen asking for API key | First launch | Follow Step 3 above |
+| "API key invalid" | Wrong or expired key | Create a fresh key at aistudio.google.com/apikey |
+| "Free tier limit hit" | Too many requests | Wait 60 seconds, try again |
+| Browser shows blank page | Server not ready | Wait 3 seconds and refresh |
+| Nothing happens on double-click | Python not in PATH | Reinstall Python with "Add to PATH" ticked |
 
 ---
 
-## What's Included in This Package
+## File Structure
 
 ```
-run.bat              ← Double-click this on Windows
-run.sh               ← Double-click this on Mac / Linux
-streamlit_app.py     ← The visual app
-requirements.txt     ← List of components (installed automatically)
-config.py            ← App settings
-agents.py            ← The two AI agents
-tasks.py             ← What each agent does
-crew.py              ← How the agents work together
-tools.py             ← Supporting tools
-main.py              ← Optional command-line version
+run.bat              <- Launch on Windows (double-click this)
+run.sh               <- Launch on Mac / Linux
+api.py               <- FastAPI backend (serves the app + API)
+crew.py              <- AI agent orchestration
+agents.py            <- Agent definitions
+tasks.py             <- Task definitions for each agent
+tools.py             <- Shared utilities
+config.py            <- API key management
+requirements.txt     <- Python dependencies
+frontend/            <- React web interface source
+  dist/              <- Pre-built app (served automatically by api.py)
+guide/               <- Bonus content
+  creator_guide.md   <- Full content strategy playbook
 ```
 
 ---
 
-## Frequently Asked Questions
+## FAQ
 
 **Is this really free?**
-Yes. Google Gemini Flash has a free tier with no credit card required. The app itself is free. You just need a Google account to get an API key.
+Yes. Google Gemini Flash is free with no credit card required. You just need a Google account.
 
 **Does it use my internet?**
-Yes — the app connects to Google's AI servers to generate content. Your own writing/ideas are sent to Google as part of each request. No data is stored or shared beyond that.
+Yes — it connects to Google's AI servers to generate content. No data is stored beyond what Google's API logs.
 
 **Can I use this offline?**
-No — an internet connection is required to generate ideas and scripts.
+No — an internet connection is required to reach the Gemini API.
 
-**Can I share this with friends?**
-That depends on your licence. Each person needs to run it on their own computer and get their own free API key.
+**Can I share this with others?**
+Each person needs to run it on their own computer with their own free API key.
 
-**I want to change the AI's writing style. Can I?**
-The agents and their instructions are in `agents.py` and `tasks.py`. If you're comfortable with text files, you can edit the prompts to adjust tone, style, or output format.
+**Can I customise the AI's style?**
+Yes. The agent prompts are in `agents.py` and `tasks.py` — edit them to adjust tone, length, or format.
+
+---
+
+## Privacy & Data
+
+- Your API key is stored locally in a `.env` file on your computer only
+- No usage data, scripts, or content is collected by Pistelle AI
+- All processing happens via direct calls between your computer and Google's Gemini API
+- See Google's privacy policy for how Gemini handles API requests: https://policies.google.com/privacy
