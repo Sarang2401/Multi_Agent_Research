@@ -487,6 +487,24 @@ a:hover { color: var(--t1); }
   background-position: right 12px center;
   padding-right: 36px;
 }
+.select-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.select-icon-wrap .input-icon {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: var(--t1);
+}
+.select-icon-wrap .input-icon svg { width: 16px; height: 16px; }
+.select-icon-wrap select {
+  padding-left: 36px;
+}
 .form-textarea { resize: vertical; min-height: 80px; }
 
 /* ── Preferences row ──────────────────────────────────────────────────────── */

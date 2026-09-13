@@ -46,7 +46,7 @@ export default function Sidebar({ current, onNavigate }: SidebarProps) {
     <aside className="sidebar">
       {/* Brand */}
       <div className="sidebar-brand">
-        <img src="/logo.jpg" alt="Pistelle AI" className="sidebar-logo" />
+        <img src="/logo.png" alt="Pistelle AI" className="sidebar-logo" />
         <div className="sidebar-brand-text">
           <span className="sidebar-wordmark">Pistelle AI</span>
           <span className="sidebar-tagline">Content · Automation · Growth</span>

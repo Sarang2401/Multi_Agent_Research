@@ -200,7 +200,10 @@ if FRONTEND_DIST.exists():
 
     @app.get("/{full_path:path}", include_in_schema=False)
     def serve_react(full_path: str):
-        """Catch-all: return index.html so React Router handles the route."""
+        """Serve static files (like logo.jpg) if they exist, otherwise fallback to index.html for React Router."""
+        target_file = FRONTEND_DIST / full_path
+        if full_path and target_file.exists() and target_file.is_file():
+            return FileResponse(str(target_file))
         index = FRONTEND_DIST / "index.html"
         return FileResponse(str(index))
 
