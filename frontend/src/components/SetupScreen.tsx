@@ -30,9 +30,8 @@ export default function SetupScreen({ onConnected }: SetupScreenProps) {
     <div className="setup-fullscreen">
       <div className="setup-wrap fade-in">
         <div className="setup-brand">
-          <img src="/logo.jpg" alt="Pistelle AI" style={{ height: 48, borderRadius: 8 }} />
-          <h1 style={{ fontSize: 22, marginTop: 12, fontWeight: 700 }}>Pistelle AI</h1>
-          <p style={{ marginTop: 4, fontSize: 13 }}>Content Intelligence Suite</p>
+          <img src="/logo.png" alt="Pistelle AI" style={{ height: 80, objectFit: "contain" }} />
+          <p style={{ marginTop: 8, fontSize: 13 }}>Content Intelligence Suite</p>
         </div>
 
         <div className="setup-card">
